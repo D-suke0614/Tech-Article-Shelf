@@ -1,7 +1,11 @@
 {
   "permissions": {
     "allow": [
-      "Bash(npm install:*)"
+      "Bash(npm install:*)",
+      "Bash(cat:*)",
+      "Bash(xargs ls:*)",
+      "Bash(git log:*)",
+      "WebFetch(domain:code.claude.com)"
     ],
     "deny": [],
     "ask": []
