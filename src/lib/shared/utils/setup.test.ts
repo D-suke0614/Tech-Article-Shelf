@@ -6,4 +6,4 @@ describe('Jest環境のセットアップ', () => {
   it('Testing Libraryが読み込まれている', () => {
     expect(true).toBeTruthy()
   })
-});
+})

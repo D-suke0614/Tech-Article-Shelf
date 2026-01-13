@@ -1,9 +1,9 @@
-import "dotenv/config"
-import { PrismaClient } from "@prisma/client"
-import { PrismaLibSql } from "@prisma/adapter-libsql"
+import 'dotenv/config'
+import { PrismaClient } from '@prisma/client'
+import { PrismaLibSql } from '@prisma/adapter-libsql'
 
 const adapter = new PrismaLibSql({
-  url: process.env.DATABASE_URL || "file:./prisma/dev.db"
+  url: process.env.DATABASE_URL || 'file:./prisma/dev.db',
 })
 
 const prisma = new PrismaClient({ adapter })
@@ -15,13 +15,13 @@ const main = async () => {
 
   // タグを作成
   const reactTag = await prisma.tag.create({
-    data: {name: 'React'}
+    data: { name: 'React' },
   })
   const nextTag = await prisma.tag.create({
-    data: {name: 'Next.js'}
+    data: { name: 'Next.js' },
   })
   const testTag = await prisma.tag.create({
-    data: {name: 'Test'}
+    data: { name: 'Test' },
   })
 
   // 記事を作成
@@ -32,7 +32,7 @@ const main = async () => {
         title: 'React Hooksの完全ガイド',
         description: 'useStateからuseEffectまで、hooksの基本を解説',
         isRead: true,
-        isFavorite: true
+        isFavorite: true,
       },
       {
         url: 'https://example.com/nextjs-app-router',
@@ -62,7 +62,7 @@ const main = async () => {
         isRead: false,
         isFavorite: false,
       },
-    ]
+    ],
   })
 
   // 記事とタグの紐付け
@@ -70,7 +70,7 @@ const main = async () => {
 
   await prisma.article.update({
     where: { id: articles[0].id },
-    data: {tags: {connect: [{id: nextTag.id}, {id: reactTag.id}]}}
+    data: { tags: { connect: [{ id: nextTag.id }, { id: reactTag.id }] } },
   })
 
   await prisma.article.update({
@@ -86,9 +86,11 @@ const main = async () => {
   console.log('✅ Seed completed!')
 }
 
-main().catch((e) => {
-  console.error(e)
-  process.exit(1)
-}).finally(async () => {
-  await prisma.$disconnect()
-})
+main()
+  .catch((e) => {
+    console.error(e)
+    process.exit(1)
+  })
+  .finally(async () => {
+    await prisma.$disconnect()
+  })

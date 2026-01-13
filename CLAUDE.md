@@ -96,12 +96,14 @@ src/
 ## 技術スタック
 
 ### フロントエンド
+
 - **Next.js 14** (Pages Router)
 - **React 18**
 - **TypeScript 5**
 - **Tailwind CSS**
 
 ### バックエンド・API
+
 - **tRPC v11** - 型安全なAPI通信
   - `@trpc/server`: サーバーサイド実装
   - `@trpc/client`: クライアント実装
@@ -109,12 +111,15 @@ src/
   - `@trpc/react-query`: React Query統合
 
 ### データベース
+
 - **Prisma v7** - ORMとデータベースクライアント
 
 ### 状態管理・データフェッチング
+
 - **TanStack Query (React Query) v5** - サーバーステート管理
 
 ### テスト
+
 - **Jest 30** - テストランナー
 - **Testing Library** - Reactコンポーネントテスト
 - **MSW v2** - APIモック
@@ -124,26 +129,31 @@ src/
 このプロジェクトではtRPCを使用して型安全なAPI通信を実現する。
 
 ### tRPCルーターの配置
+
 - ルーター定義: `src/lib/server/api/routers/`
 - ルート統合: `src/lib/server/api/root.ts` (作成予定)
 
 ### tRPCクライアント設定
+
 - クライアント設定: `src/lib/client/trpc.ts` (作成予定)
 - `_app.tsx`でtRPC Providerを統合
 
 ## テスト方針
 
 ### テストファイルの配置
+
 - `**/__tests__/**/*.[jt]s?(x)` または
 - `**/?(*.)+(spec|test).[jt]s?(x)`
 
 ### MSWによるAPIモック
+
 - MSWサーバー設定: `src/lib/server/api/msw/server.ts`
 - APIごとのハンドラー: `src/lib/server/api/{domain}/msw/`
   - `index.ts`: MSWハンドラー定義
   - `fixture.ts`: テストデータ
 
 ### テストセットアップ
+
 - `jest.setup.ts`: グローバルセットアップ（MSWサーバーの起動など）
 - MSWサーバーは各テストスイートで `beforeAll`、`afterEach`、`afterAll` を使用
 
@@ -158,6 +168,7 @@ import { something } from '@/lib/server/api'
 ## Prismaワークフロー
 
 ### 設定ファイル
+
 - **prisma.config.ts**: Prisma v7の設定ファイル（datasource URL、マイグレーションパスなど）
 - **prisma/schema.prisma**: データベーススキーマ定義
 - **package.json**: `prisma.seed`セクションでシードスクリプトを定義
