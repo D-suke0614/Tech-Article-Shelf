@@ -169,7 +169,7 @@ import { something } from '@/lib/server/api'
 npx prisma generate
 
 # マイグレーション作成（開発環境）
-npx prisma migrate dev
+npx prisma migrate dev --name init
 
 # マイグレーション作成（本番環境）
 npx prisma migrate deploy
