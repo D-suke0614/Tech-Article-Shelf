@@ -109,7 +109,7 @@ src/
   - `@trpc/react-query`: React Query統合
 
 ### データベース
-- **Prisma v6** - ORMとデータベースクライアント
+- **Prisma v7** - ORMとデータベースクライアント
 
 ### 状態管理・データフェッチング
 - **TanStack Query (React Query) v5** - サーバーステート管理
@@ -155,15 +155,37 @@ src/
 import { something } from '@/lib/server/api'
 ```
 
-## Prismaワークフロー (将来的に使用)
+## Prismaワークフロー
+
+### 設定ファイル
+- **prisma.config.ts**: Prisma v7の設定ファイル（datasource URL、マイグレーションパスなど）
+- **prisma/schema.prisma**: データベーススキーマ定義
+- **package.json**: `prisma.seed`セクションでシードスクリプトを定義
+
+### 基本コマンド
 
 ```bash
 # スキーマから型生成
 npx prisma generate
 
-# マイグレーション作成
+# マイグレーション作成（開発環境）
 npx prisma migrate dev
 
-# Prisma Studio起動
+# マイグレーション作成（本番環境）
+npx prisma migrate deploy
+
+# データベースリセット（全データ削除 + マイグレーション再実行 + シード自動実行）
+npx prisma migrate reset
+
+# シードデータ投入
+npx prisma db seed
+
+# Prisma Studio起動（データベースGUI）
 npx prisma studio
 ```
+
+### Prisma v7の重要な変更点
+
+1. **datasource.url の廃止**: `schema.prisma`から`url`プロパティを削除し、`prisma.config.ts`で管理
+2. **seed設定**: `package.json`の`prisma.seed`が必須（`prisma.config.ts`のみでは不十分）
+3. **LibSQL Adapter使用**: `@prisma/adapter-libsql`で軽量なSQLiteベースのDB接続
