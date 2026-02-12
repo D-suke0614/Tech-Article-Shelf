@@ -3,8 +3,15 @@
 
 import '@testing-library/jest-dom'
 
-// import { server } from './src/lib/server/api/msw/server'
+// ============================================
+// MSW Server Setup
+// ============================================
+import { server } from './src/lib/server/api/msw/server'
 
-// beforeAll(() => server.listen())
-// afterEach(() => server.resetHandlers())
-// afterAll(() => server.close())
+beforeAll(() => {
+  server.listen({
+    onUnhandledRequest: 'warn', // モックされていないリクエストを警告
+  })
+})
+afterEach(() => server.resetHandlers())
+afterAll(() => server.close())
