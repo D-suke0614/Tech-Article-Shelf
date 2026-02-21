@@ -42,7 +42,7 @@
 | Week   | 期間      | ステータス | 完了率    |
 | ------ | --------- | ---------- | --------- |
 | Week 1 | Day 1-7   | ✅ 完了    | 100%      |
-| Week 2 | Day 8-14  | 🔄 進行中  | 29% (2/7) |
+| Week 2 | Day 8-14  | 🔄 進行中  | 43% (3/7) |
 | Week 3 | Day 15-21 | ⬜ 未着手  | 0%        |
 | Week 4 | Day 22-30 | ⬜ 未着手  | 0%        |
 
@@ -147,25 +147,33 @@
 - `server.use()` でテスト毎にハンドラーを上書き
 - `afterEach` + `resetHandlers()` でテスト間の状態をクリーンに保つ
 
-### Day 10（1h）：tRPCクライアント設定 + MSWハンドラー
+### Day 10（1h）：tRPCクライアント設定 + MSWハンドラー ✅
 
-- [ ] `src/lib/client/trpc.ts` 作成
-  - [ ] tRPC React Query hooks設定
-  - [ ] httpBatchLink設定
-  - [ ] superjsonトランスフォーマー設定（サーバー側と一致）
-- [ ] `src/components/providers/TRPCProvider.tsx` 作成
-  - [ ] QueryClientProvider + tRPCProvider統合
-- [ ] `_app.tsx` にProvider追加
-- [ ] `src/lib/server/api/article/msw/` 実装（空ファイルが既に存在）
-  - [ ] `index.ts` - articleルーターのMSWハンドラー
-  - [ ] `fixture.ts` - テスト用固定データ（Article型に準拠）
-- [ ] MSWハンドラーをserver.tsに統合
-- [ ] ブラウザで動作確認（開発サーバー起動）
+- [x] `src/lib/client/trpc.ts` 作成
+  - [x] tRPC React Query hooks設定
+  - [x] httpBatchLink設定
+  - [x] superjsonトランスフォーマー設定（サーバー側と一致）
+- [x] `src/components/providers/TRPCProvider.tsx` 作成
+  - [x] QueryClientProvider + tRPCProvider統合
+- [x] `_app.tsx` にProvider追加
+- [x] `src/lib/server/api/article/msw/` 実装（空ファイルが既に存在）
+  - [x] `index.ts` - articleルーターのMSWハンドラー
+  - [x] `fixture.ts` - テスト用固定データ（Article型に準拠）
+- [x] MSWハンドラーをserver.tsに統合
+- [x] ビルド・テスト実行で動作確認
 
-**既存実装の確認ポイント:**
+**ハマりポイント:**
 
-- tRPCサーバー側は `superjson` トランスフォーマーを使用
-- articleルーターに `list`, `create`, `toggleRead`, `toggleFavorite` が実装済み
+- superjsonとその依存関係（copy-anything, is-what）がESMのため、Jest設定で`transformIgnorePatterns`に追加が必要
+- tRPCのMutationリクエストボディは `{ "0": { json, meta } }` 形式（バッチリクエスト）
+- tRPCレスポンスは `{ result: { data: { json, meta } } }` 形式（superjson対応）
+
+**学び:**
+
+- `createTRPCReact<AppRouter>()` で型安全なクライアントを作成（サーバーの型が自動伝播）
+- `useState(() => new QueryClient())` パターンでProviderのインスタンスを安定化
+- MSW v2では `http.get()` + `HttpResponse.json()` の新API
+- フィクスチャは正常系・エッジケース（null、空配列）を網羅して設計
 
 **tRPCリクエスト形式（参考）:**
 
