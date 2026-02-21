@@ -22,7 +22,7 @@ module.exports = async () => {
   const jestConfig = await createJestConfig(customJestConfig)()
   // Next.jsのデフォルト /node_modules/ を除外し、カスタムパターンのみ使用
   jestConfig.transformIgnorePatterns = [
-    '/node_modules/(?!(until-async|msw|@mswjs|cheerio|parse5|dom-serializer|htmlparser2|css-select|css-what|domhandler|domutils|nth-check|boolbase|entities)/)',
+    '/node_modules/(?!(until-async|msw|@mswjs|cheerio|parse5|dom-serializer|htmlparser2|css-select|css-what|domhandler|domutils|nth-check|boolbase|entities|superjson|copy-anything|is-what)/)',
     '^.+\\.module\\.(css|sass|scss)$',
   ]
   return jestConfig

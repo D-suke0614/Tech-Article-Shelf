@@ -6,7 +6,15 @@
       "Bash(xargs ls:*)",
       "Bash(git log:*)",
       "WebFetch(domain:code.claude.com)",
-      "Bash(echo:*)"
+      "Bash(echo:*)",
+      "Bash(npm test:*)",
+      "Bash(gh issue create:*)",
+      "Bash(git add:*)",
+      "Bash(git commit -m \"$\\(cat <<''EOF''\nfeat: OGP取得機能を実装（SSRF対策・タイムアウト処理付き）\n\n- cheerioを使用したOGPメタタグの抽出機能を追加\n- SSRF対策としてプライベートIPアドレスへのアクセスをブロック\n- AbortControllerによる10秒タイムアウト処理を実装\n- Jest環境をMSW v2対応に更新（fetch API、AbortControllerのポリフィル）\n\n関連issue: #1（DNS Rebinding対策・テスト追加）\n\n🤖 Generated with [Claude Code]\\(https://claude.com/claude-code\\)\n\nCo-Authored-By: Claude <noreply@anthropic.com>\nEOF\n\\)\")",
+      "Bash(git push:*)",
+      "Bash(gh pr create --base main --title \"feat: OGP取得機能を実装\" --body \"$\\(cat <<''EOF''\n## Summary\n- cheerioを使用したOGPメタタグの抽出機能を追加\n- SSRF対策としてプライベートIPアドレスへのアクセスをブロック\n- AbortControllerによる10秒タイムアウト処理を実装\n- Jest環境をMSW v2対応に更新\n\n## 変更内容\n\n### 新規ファイル\n- `src/lib/server/api/ogp/index.ts` - OGP取得関数\n- `src/lib/server/api/ogp/index.test.ts` - テスト\n- `src/lib/server/api/ogp/types.ts` - 型定義\n- `jest.env.js` - カスタムJest環境（MSW v2対応）\n- `jest.polyfills.ts` - ポリフィル設定\n\n### 変更ファイル\n- `jest.config.js` - MSW v2対応の設定追加\n- `jest.setup.ts` - MSWサーバーセットアップ\n- `package.json` - cheerio, undici依存追加\n\n## セキュリティ対策\n- プライベートIPアドレス（localhost, 127.x.x.x, 10.x.x.x, 192.168.x.x, 169.254.x.x）へのアクセスをブロック\n- 10秒タイムアウトで応答しないサーバーへのリクエストを中断\n\n## 関連issue\n- #1 （DNS Rebinding対策・テスト追加は後続対応）\n\n## Test plan\n- [x] `npm test` - 全27件のテストが通過\n- [ ] OGP取得機能の動作確認\n\n🤖 Generated with [Claude Code]\\(https://claude.com/claude-code\\)\nEOF\n\\)\")",
+      "Bash(npm run build:*)",
+      "Bash(npm run lint:*)"
     ],
     "deny": [],
     "ask": []
