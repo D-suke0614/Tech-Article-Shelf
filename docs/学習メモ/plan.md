@@ -42,7 +42,7 @@
 | Week   | 期間      | ステータス | 完了率    |
 | ------ | --------- | ---------- | --------- |
 | Week 1 | Day 1-7   | ✅ 完了    | 100%      |
-| Week 2 | Day 8-14  | 🔄 進行中  | 43% (3/7) |
+| Week 2 | Day 8-14  | 🔄 進行中  | 57% (4/7) |
 | Week 3 | Day 15-21 | ⬜ 未着手  | 0%        |
 | Week 4 | Day 22-30 | ⬜ 未着手  | 0%        |
 
@@ -183,17 +183,17 @@ Mutation（POST）: /api/trpc/article.create
 レスポンス: { result: { data: { json: [...] } } }
 ```
 
-### Day 11（1h）：記事一覧ページ実装
+### Day 11（1h）：記事一覧ページ実装 ✅
 
-- [ ] `src/pages/index.tsx` - 記事一覧ページ（現在はデフォルトテンプレート）
-- [ ] `src/components/features/article/ArticleCard/` - 記事カードコンポーネント
-  - [ ] `ArticleCard.tsx`
-  - [ ] `index.ts`（re-export）
-- [ ] `src/components/features/article/ArticleList/` - 記事リストコンポーネント
-  - [ ] `ArticleList.tsx`
-  - [ ] `index.ts`（re-export）
-- [ ] tRPCの `trpc.article.list.useQuery()` で記事取得
-- [ ] ローディング、エラー、空状態のUI（Tailwind CSS使用）
+- [x] `src/pages/index.tsx` - 記事一覧ページ（現在はデフォルトテンプレート）
+- [x] `src/components/features/article/ArticleCard/` - 記事カードコンポーネント
+  - [x] `ArticleCard.tsx`
+  - [x] `index.ts`（re-export）
+- [x] `src/components/features/article/ArticleList/` - 記事リストコンポーネント
+  - [x] `ArticleList.tsx`
+  - [x] `index.ts`（re-export）
+- [x] tRPCの `trpc.article.list.useQuery()` で記事取得
+- [x] ローディング、エラー、空状態のUI（Tailwind CSS使用）
 
 ### Day 12（1h）：記事一覧のコンポーネントテスト
 
