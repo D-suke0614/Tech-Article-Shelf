@@ -42,7 +42,7 @@
 | Week   | 期間      | ステータス | 完了率    |
 | ------ | --------- | ---------- | --------- |
 | Week 1 | Day 1-7   | ✅ 完了    | 100%      |
-| Week 2 | Day 8-14  | 🔄 進行中  | 57% (4/7) |
+| Week 2 | Day 8-14  | 🔄 進行中  | 71% (5/7) |
 | Week 3 | Day 15-21 | ⬜ 未着手  | 0%        |
 | Week 4 | Day 22-30 | ⬜ 未着手  | 0%        |
 
@@ -195,16 +195,16 @@ Mutation（POST）: /api/trpc/article.create
 - [x] tRPCの `trpc.article.list.useQuery()` で記事取得
 - [x] ローディング、エラー、空状態のUI（Tailwind CSS使用）
 
-### Day 12（1h）：記事一覧のコンポーネントテスト
+### Day 12（1h）：記事一覧のコンポーネントテスト ✅
 
-- [ ] `src/components/features/article/ArticleCard/ArticleCard.test.tsx`
-  - [ ] 記事のタイトルとサムネイルが表示される
-  - [ ] 未読の場合、未読バッジが表示される
-  - [ ] お気に入りアイコンをクリックするとコールバックが呼ばれる
-- [ ] `src/components/features/article/ArticleList/ArticleList.test.tsx`
-  - [ ] 複数記事の表示
-  - [ ] 空の場合のメッセージ表示
-- [ ] Testing Libraryのクエリ優先順位を意識（getByRole > getByText）
+- [x] `src/components/features/article/ArticleCard/ArticleCard.test.tsx`
+  - [x] 記事のタイトルとサムネイルが表示される
+  - [x] 未読の場合、未読バッジが表示される
+  - [x] お気に入りバッジの表示・非表示（※コールバックなし、静的バッジの実装に合わせてテスト）
+- [x] `src/components/features/article/ArticleList/ArticleList.test.tsx`
+  - [x] 複数記事の表示
+  - [x] 空の場合のメッセージ表示
+- [x] Testing Libraryのクエリ優先順位を意識（getByRole > getByText）
 
 ### Day 13（1h）：記事登録フォーム実装
 
