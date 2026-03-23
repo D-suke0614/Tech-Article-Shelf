@@ -1,5 +1,6 @@
 import { z } from 'zod'
 import { router, publicProcedure } from '../trpc/trpc'
+import { fetchOgpData } from '../ogp'
 
 // todo: 認証機能を実装する際に、適切にprocedureを使い分けるようにする
 // todo: エラーハンドリングの実装
@@ -42,6 +43,13 @@ export const articleRouter = router({
         where: { id: input.id },
         data: { isRead: !input.currentValue },
       })
+    }),
+
+  // OGPデータ取得
+  fetchOgp: publicProcedure
+    .input(z.object({ url: z.string().url() }))
+    .query(async ({ input }) => {
+      return fetchOgpData(input.url)
     }),
 
   // お気に入りトグル

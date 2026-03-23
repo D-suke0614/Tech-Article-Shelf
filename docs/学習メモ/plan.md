@@ -42,7 +42,7 @@
 | Week   | 期間      | ステータス | 完了率    |
 | ------ | --------- | ---------- | --------- |
 | Week 1 | Day 1-7   | ✅ 完了    | 100%      |
-| Week 2 | Day 8-14  | 🔄 進行中  | 71% (5/7) |
+| Week 2 | Day 8-14  | 🔄 進行中  | 86% (6/7) |
 | Week 3 | Day 15-21 | ⬜ 未着手  | 0%        |
 | Week 4 | Day 22-30 | ⬜ 未着手  | 0%        |
 
@@ -206,16 +206,16 @@ Mutation（POST）: /api/trpc/article.create
   - [x] 空の場合のメッセージ表示
 - [x] Testing Libraryのクエリ優先順位を意識（getByRole > getByText）
 
-### Day 13（1h）：記事登録フォーム実装
+### Day 13（1h）：記事登録フォーム実装 ✅
 
-- [ ] `src/components/features/article/ArticleForm/`
-  - [ ] `ArticleForm.tsx` - URL入力フィールド + タグ選択 + 送信ボタン
-  - [ ] `index.ts`（re-export）
-- [ ] `src/components/hooks/useCreateArticle/`
-  - [ ] `index.ts` - tRPC mutationのラッパー
-  - [ ] ローディング状態管理
-  - [ ] エラーハンドリング
-- [ ] OGP取得APIと連携（URL入力時に自動取得を検討）
+- [x] `src/components/features/article/ArticleForm/`
+  - [x] `ArticleForm.tsx` - URL入力フィールド + タグ選択 + 送信ボタン
+  - [x] `index.ts`（re-export）
+- [x] `src/components/hooks/useCreateArticle/`
+  - [x] `index.ts` - tRPC mutationのラッパー
+  - [x] ローディング状態管理
+  - [x] エラーハンドリング
+- [x] OGP取得APIと連携（URL入力から500msデバウンスで自動取得）
 
 ### Day 14（1h）：Week 2 振り返り + カスタムフックテスト
 
