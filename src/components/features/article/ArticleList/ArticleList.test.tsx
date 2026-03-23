@@ -1,6 +1,16 @@
-import { render, screen } from '@testing-library/react'
+import { screen } from '@testing-library/react'
 import { ArticleList } from './ArticleList'
 import type { ArticleWithTags } from '@/lib/server/api/article/msw/fixture'
+import { renderWithProviders } from '@/test/render-with-providers'
+
+// ArticleCard → useToggleFavorite は tRPC コンテキストが必要なためモック化
+jest.mock('@/components/hooks/useToggleFavorite', () => ({
+  useToggleFavorite: () => ({
+    toggleFavorite: jest.fn(),
+    isLoading: false,
+    error: null,
+  }),
+}))
 
 const makeArticle = (
   overrides: Partial<ArticleWithTags> = {}
@@ -35,7 +45,7 @@ describe('ArticleList', () => {
           title: '記事3のタイトル',
         }),
       ]
-      render(<ArticleList articles={articles} />)
+      renderWithProviders(<ArticleList articles={articles} />)
 
       // Assert
       expect(
@@ -53,7 +63,7 @@ describe('ArticleList', () => {
   describe('空状態の表示', () => {
     it('記事がない場合、「記事がまだありません」が表示される', () => {
       // Arrange
-      render(<ArticleList articles={[]} />)
+      renderWithProviders(<ArticleList articles={[]} />)
 
       // Assert
       expect(screen.getByText('記事がまだありません')).toBeInTheDocument()
@@ -61,7 +71,7 @@ describe('ArticleList', () => {
 
     it('記事がない場合、登録を促すメッセージが表示される', () => {
       // Arrange
-      render(<ArticleList articles={[]} />)
+      renderWithProviders(<ArticleList articles={[]} />)
 
       // Assert
       expect(
@@ -71,7 +81,7 @@ describe('ArticleList', () => {
 
     it('記事がない場合、記事リンクは表示されない', () => {
       // Arrange
-      render(<ArticleList articles={[]} />)
+      renderWithProviders(<ArticleList articles={[]} />)
 
       // Assert
       expect(screen.queryByRole('link')).not.toBeInTheDocument()
