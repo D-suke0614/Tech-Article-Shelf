@@ -1,40 +1,131 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Tech Article Shelf
 
-## Getting Started
+技術記事ブックマーク管理アプリ。Jest × MSW を使ったテスト設計の学習プロジェクト。
 
-First, run the development server:
+## 技術スタック
+
+| カテゴリ       | 技術                                                            |
+| -------------- | --------------------------------------------------------------- |
+| フロントエンド | Next.js 14 (Pages Router), React 18, TypeScript 5, Tailwind CSS |
+| API            | tRPC v11, TanStack Query v5                                     |
+| DB             | Prisma v7, LibSQL (SQLite)                                      |
+| テスト         | Jest 30, Testing Library, MSW v2                                |
+| CI/CD          | GitHub Actions, Codecov                                         |
+
+## 機能
+
+- 記事URL登録（OGP自動取得）
+- 記事一覧表示（キーワード検索・タグフィルター）
+- お気に入りトグル（楽観的更新）
+- 既読/未読管理
+
+## セットアップ
 
 ```bash
+# 依存関係インストール
+npm install
+
+# DBマイグレーション
+npx prisma migrate dev
+
+# シードデータ投入
+npx prisma db seed
+
+# 開発サーバー起動
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## テスト
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+```bash
+# テスト実行
+npm test
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+# カバレッジ付きテスト
+npx jest --coverage
+```
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+### テストカバレッジ
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+| 指標       | 達成値 | 目標       |
+| ---------- | ------ | ---------- |
+| Statements | 84.87% | 80%以上 ✅ |
+| Branches   | 70.74% | -          |
+| Functions  | 85.93% | -          |
+| Lines      | 88.14% | -          |
 
-## Learn More
+### テスト構成
 
-To learn more about Next.js, take a look at the following resources:
+```
+src/
+├── lib/
+│   └── shared/utils/url.test.ts          # ユーティリティ関数テスト（TDD）
+│   └── server/api/ogp/index.test.ts      # OGP取得テスト（MSW）
+│   └── server/api/article/
+│       └── error-handling.test.ts        # エラーハンドリングテスト
+├── components/
+│   ├── ui/
+│   │   ├── SearchBar/SearchBar.test.tsx  # コンポーネントテスト
+│   │   └── TagFilter/TagFilter.test.tsx  # コンポーネントテスト
+│   ├── features/article/
+│   │   ├── ArticleCard/ArticleCard.test.tsx
+│   │   └── ArticleList/ArticleList.test.tsx
+│   └── hooks/
+│       ├── useCreateArticle/index.test.ts    # フックテスト（MSW）
+│       ├── useArticleFilter/index.test.ts    # フックテスト
+│       └── useToggleFavorite/index.test.ts   # 楽観的更新テスト
+└── pages/
+    └── index.test.tsx                    # ページ統合テスト
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## テストパターン
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+このプロジェクトは **AAAパターン（Arrange-Act-Assert）** を採用しています。
 
-## Deploy on Vercel
+### MSWによるAPIモック
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```typescript
+// テスト内でレスポンスをオーバーライド
+server.use(
+  http.get('/api/trpc/article.list', () => {
+    return HttpResponse.json({ result: { data: superjson.serialize([]) } })
+  })
+)
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+### 楽観的更新のテスト
+
+```typescript
+// 1. mutation発火
+act(() => {
+  result.current.toggleFavorite({ id: 'article-1', currentValue: true })
+})
+
+// 2. isLoading が true になることを確認
+await waitFor(() => {
+  expect(result.current.isLoading).toBe(true)
+})
+
+// 3. 完了後は false
+await waitFor(() => {
+  expect(result.current.isLoading).toBe(false)
+})
+```
+
+## プロジェクト構造
+
+```
+src/
+├── components/
+│   ├── features/article/     # 記事関連コンポーネント
+│   ├── hooks/                # カスタムフック
+│   ├── providers/            # Reactプロバイダー
+│   └── ui/                   # 汎用UIコンポーネント
+├── lib/
+│   ├── client/               # tRPCクライアント設定
+│   ├── server/api/           # tRPCルーター・MSWハンドラー
+│   └── shared/               # 共通ユーティリティ
+├── pages/                    # Next.jsページ
+├── server/                   # tRPC設定
+└── test/                     # テストユーティリティ
+```

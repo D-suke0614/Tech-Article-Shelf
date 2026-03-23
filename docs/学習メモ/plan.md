@@ -355,12 +355,12 @@ Mutation（POST）: /api/trpc/article.create
   ```
 - [x] PRでテストが自動実行されることを確認（workflow設定済み）
 
-### Day 24（1h）：リファクタリング + コード整理
+### Day 24（1h）：リファクタリング + コード整理 ✅
 
-- [ ] テストコードの重複排除
-- [ ] テストヘルパー関数の作成
-- [ ] ファイル構成の見直し
-- [ ] README.md 作成
+- [x] テストコードの重複排除（`src/test/render-with-providers.tsx` に共通化）
+- [x] テストヘルパー関数の作成（createWrapper パターン統一）
+- [x] ファイル構成の見直し
+- [x] README.md 作成
 
 ### Day 25（1h）：デプロイ
 
