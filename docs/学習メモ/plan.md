@@ -39,12 +39,12 @@
 
 ## 📊 進捗サマリー
 
-| Week   | 期間      | ステータス | 完了率    |
-| ------ | --------- | ---------- | --------- |
-| Week 1 | Day 1-7   | ✅ 完了    | 100%      |
-| Week 2 | Day 8-14  | 🔄 進行中  | 86% (6/7) |
-| Week 3 | Day 15-21 | ⬜ 未着手  | 0%        |
-| Week 4 | Day 22-30 | ⬜ 未着手  | 0%        |
+| Week   | 期間      | ステータス | 完了率 |
+| ------ | --------- | ---------- | ------ |
+| Week 1 | Day 1-7   | ✅ 完了    | 100%   |
+| Week 2 | Day 8-14  | ✅ 完了    | 100%   |
+| Week 3 | Day 15-21 | ⬜ 未着手  | 0%     |
+| Week 4 | Day 22-30 | ⬜ 未着手  | 0%     |
 
 ---
 
@@ -217,13 +217,13 @@ Mutation（POST）: /api/trpc/article.create
   - [x] エラーハンドリング
 - [x] OGP取得APIと連携（URL入力から500msデバウンスで自動取得）
 
-### Day 14（1h）：Week 2 振り返り + カスタムフックテスト
+### Day 14（1h）：Week 2 振り返り + カスタムフックテスト ✅
 
-- [ ] `src/components/hooks/useCreateArticle/index.test.ts`
-  - [ ] `renderHook` を使用（@testing-library/react）
-  - [ ] MSWでtRPC APIモック
-  - [ ] 成功時：記事が作成され、キャッシュが更新される
-  - [ ] 失敗時：エラー状態が設定される
+- [x] `src/components/hooks/useCreateArticle/index.test.ts`
+  - [x] `renderHook` を使用（@testing-library/react）
+  - [x] MSWでtRPC APIモック
+  - [x] 成功時：記事が作成され、キャッシュが更新される
+  - [x] 失敗時：エラー状態が設定される
 - [ ] 振り返り
   - [ ] 実装したテストパターンを整理（ユニット/コンポーネント/フック）
   - [ ] Week 3の計画調整
