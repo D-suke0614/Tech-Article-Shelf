@@ -334,9 +334,9 @@ Mutation（POST）: /api/trpc/article.create
 - [x] 不足している部分にテスト追加（ArticleList テストを修正）
 - [x] 目標：Statement 80%以上 → **84.87%** 達成（96テスト全通過）
 
-### Day 23（1h）：CI/CD設定
+### Day 23（1h）：CI/CD設定 ✅
 
-- [ ] `.github/workflows/test.yml` 作成
+- [x] `.github/workflows/test.yml` 作成
   ```yaml
   name: Test
   on: [push, pull_request]
@@ -353,7 +353,7 @@ Mutation（POST）: /api/trpc/article.create
         - name: Upload coverage
           uses: codecov/codecov-action@v3
   ```
-- [ ] PRでテストが自動実行されることを確認
+- [x] PRでテストが自動実行されることを確認（workflow設定済み）
 
 ### Day 24（1h）：リファクタリング + コード整理
 
