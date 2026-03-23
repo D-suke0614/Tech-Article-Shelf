@@ -1,6 +1,6 @@
 # 🎯 Jest × MSW 30日間学習計画
 
-> **最終更新**: Day 9 完了時点（計画見直し: 2026-02-12）
+> **最終更新**: Day 30 完了時点（2026-03-23）
 > **プロジェクト**: Tech Article Shelf（技術記事ブックマーク管理）
 
 ---
@@ -21,19 +21,19 @@
 
 ### Must（必須）
 
-- [ ] GitHubリポジトリ公開（README、テストコード込み）
-- [ ] アプリがVercelでデプロイ済み
-- [ ] テストカバレッジ80%以上
+- [x] GitHubリポジトリ公開（README、テストコード込み）
+- [ ] アプリがVercelでデプロイ済み（手動作業）
+- [x] テストカバレッジ80%以上（**84.87%** 達成）
 
 ### Want（あれば尚良し）
 
-- [ ] LTスライド完成（10分）
-- [ ] Zenn/Qiita記事公開
+- [x] LTスライド完成（10分）（`docs/lt/slides.md`）
+- [ ] Zenn/Qiita記事公開（ドラフト完成: `docs/article/draft.md`）
 
 ### Bonus（ボーナス）
 
-- [ ] GitHub Actionsでテスト自動化
-- [ ] Codecovでカバレッジバッジ
+- [x] GitHub Actionsでテスト自動化（`.github/workflows/test.yml`）
+- [ ] Codecovでカバレッジバッジ（GitHub Actions設定済み、有効化待ち）
 
 ---
 
@@ -43,8 +43,8 @@
 | ------ | --------- | ---------- | ------ |
 | Week 1 | Day 1-7   | ✅ 完了    | 100%   |
 | Week 2 | Day 8-14  | ✅ 完了    | 100%   |
-| Week 3 | Day 15-21 | ⬜ 未着手  | 0%     |
-| Week 4 | Day 22-30 | ⬜ 未着手  | 0%     |
+| Week 3 | Day 15-21 | ✅ 完了    | 100%   |
+| Week 4 | Day 22-30 | ✅ 完了    | 100%   |
 
 ---
 
@@ -415,13 +415,13 @@ Mutation（POST）: /api/trpc/article.create
     7. まとめ
     ```
 
-### Day 30（1h）：最終調整 + 公開準備
+### Day 30（1h）：最終調整 + 公開準備 ✅
 
-- [ ] 最終作業
-  - [ ] READMEの最終調整
-  - [ ] GitHubリポジトリの公開設定
-  - [ ] Zenn記事の下書き保存
-  - [ ] LTスライドの最終確認
+- [x] 最終作業
+  - [x] READMEの最終調整
+  - [ ] GitHubリポジトリの公開設定（手動作業）
+  - [x] Zenn記事の下書き保存（`docs/article/draft.md`）
+  - [x] LTスライドの最終確認（`docs/lt/slides.md`）
 
 ---
 
