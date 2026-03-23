@@ -6,13 +6,51 @@ import { fetchOgpData } from '../ogp'
 // todo: エラーハンドリングの実装
 
 export const articleRouter = router({
-  // 記事一取得
-  list: publicProcedure.query(async ({ ctx }) => {
-    return ctx.prisma.article.findMany({
-      include: { tags: true },
-      orderBy: { createdAt: 'desc' },
-    })
-  }),
+  // 記事一覧取得（検索・フィルタ対応）
+  list: publicProcedure
+    .input(
+      z
+        .object({
+          search: z.string().optional(),
+          tagIds: z.array(z.string()).optional(),
+        })
+        .optional()
+    )
+    .query(async ({ ctx, input }) => {
+      return ctx.prisma.article.findMany({
+        where: {
+          AND: [
+            input?.search
+              ? {
+                  OR: [
+                    {
+                      title: {
+                        contains: input.search,
+                      },
+                    },
+                    {
+                      description: {
+                        contains: input.search,
+                      },
+                    },
+                  ],
+                }
+              : {},
+            input?.tagIds && input.tagIds.length > 0
+              ? {
+                  tags: {
+                    some: {
+                      id: { in: input.tagIds },
+                    },
+                  },
+                }
+              : {},
+          ],
+        },
+        include: { tags: true },
+        orderBy: { createdAt: 'desc' },
+      })
+    }),
 
   // 記事作成
   create: publicProcedure

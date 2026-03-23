@@ -1,9 +1,30 @@
 import { trpc } from '@/lib/client/trpc'
 import { ArticleList } from '@/components/features/article/ArticleList'
 import { ArticleForm } from '@/components/features/article/ArticleForm'
+import { SearchBar } from '@/components/ui/SearchBar'
+import { TagFilter } from '@/components/ui/TagFilter'
+import { useArticleFilter } from '@/components/hooks/useArticleFilter'
 
 export default function Home() {
-  const { data: articles, isLoading, error } = trpc.article.list.useQuery()
+  const { data: allArticles } = trpc.article.list.useQuery()
+  const {
+    articles,
+    isLoading,
+    error,
+    search,
+    setSearch,
+    selectedTagIds,
+    toggleTag,
+    clearFilters,
+    hasActiveFilters,
+  } = useArticleFilter()
+
+  // 全記事からタグ一覧を抽出（重複なし）
+  const allTags = Array.from(
+    new Map(
+      (allArticles ?? []).flatMap((a) => a.tags).map((t) => [t.id, t])
+    ).values()
+  )
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -20,6 +41,27 @@ export default function Home() {
           <ArticleForm />
         </div>
 
+        {/* 検索・フィルターエリア */}
+        <div className="mb-6 space-y-3">
+          <SearchBar value={search} onChange={setSearch} />
+          {allTags.length > 0 && (
+            <TagFilter
+              tags={allTags}
+              selectedTagIds={selectedTagIds}
+              onToggle={toggleTag}
+            />
+          )}
+          {hasActiveFilters && (
+            <button
+              type="button"
+              onClick={clearFilters}
+              className="text-xs text-blue-600 hover:underline"
+            >
+              フィルターをクリア
+            </button>
+          )}
+        </div>
+
         {isLoading && (
           <div className="text-center py-16 text-gray-400">
             <p>読み込み中...</p>
@@ -33,7 +75,7 @@ export default function Home() {
           </div>
         )}
 
-        {!isLoading && !error && <ArticleList articles={articles ?? []} />}
+        {!isLoading && !error && <ArticleList articles={articles} />}
       </main>
     </div>
   )

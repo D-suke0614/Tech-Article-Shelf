@@ -18,9 +18,40 @@ function createTRPCResponse<T>(data: T) {
 }
 
 export const articleHandlers = [
-  // article.list - 記事一覧取得
-  http.get('/api/trpc/article.list', () => {
-    return HttpResponse.json(createTRPCResponse(articles))
+  // article.list - 記事一覧取得（検索・フィルタ対応）
+  http.get('/api/trpc/article.list', ({ request }) => {
+    const url = new URL(request.url)
+    const inputParam = url.searchParams.get('input')
+
+    let filtered = [...articles]
+
+    if (inputParam) {
+      try {
+        const input = JSON.parse(inputParam) as {
+          json?: { search?: string; tagIds?: string[] }
+        }
+        const { search, tagIds } = input.json ?? {}
+
+        if (search) {
+          const lower = search.toLowerCase()
+          filtered = filtered.filter(
+            (a) =>
+              a.title.toLowerCase().includes(lower) ||
+              (a.description?.toLowerCase().includes(lower) ?? false)
+          )
+        }
+
+        if (tagIds && tagIds.length > 0) {
+          filtered = filtered.filter((a) =>
+            a.tags.some((t) => tagIds.includes(t.id))
+          )
+        }
+      } catch {
+        // parse失敗時は全件返す
+      }
+    }
+
+    return HttpResponse.json(createTRPCResponse(filtered))
   }),
 
   // article.create - 記事作成

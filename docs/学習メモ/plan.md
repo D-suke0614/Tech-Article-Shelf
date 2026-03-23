@@ -224,9 +224,9 @@ Mutation（POST）: /api/trpc/article.create
   - [x] MSWでtRPC APIモック
   - [x] 成功時：記事が作成され、キャッシュが更新される
   - [x] 失敗時：エラー状態が設定される
-- [ ] 振り返り
-  - [ ] 実装したテストパターンを整理（ユニット/コンポーネント/フック）
-  - [ ] Week 3の計画調整
+- [x] 振り返り
+  - [x] 実装したテストパターンを整理（ユニット/コンポーネント/フック）
+  - [x] Week 3の計画調整
 
 **Week 2 完了時点での成果物:**
 
@@ -240,21 +240,21 @@ Mutation（POST）: /api/trpc/article.create
 
 ## 📅 Week 3：応用機能 + 統合テスト
 
-### Day 15（1h）：検索・フィルタ機能実装
+### Day 15（1h）：検索・フィルタ機能実装 ✅
 
-- [ ] `src/components/ui/SearchBar/` - キーワード検索コンポーネント
-- [ ] `src/components/ui/TagFilter/` - タグフィルターコンポーネント
-- [ ] `src/components/hooks/useArticleFilter/` - フィルタロジック
-- [ ] tRPCの `article.list` にフィルタパラメータ追加（zodスキーマ更新）
+- [x] `src/components/ui/SearchBar/` - キーワード検索コンポーネント
+- [x] `src/components/ui/TagFilter/` - タグフィルターコンポーネント
+- [x] `src/components/hooks/useArticleFilter/` - フィルタロジック
+- [x] tRPCの `article.list` にフィルタパラメータ追加（zodスキーマ更新）
 
-### Day 16（1h）：検索機能のテスト
+### Day 16（1h）：検索機能のテスト ✅
 
-- [ ] `src/components/hooks/useArticleFilter/index.test.ts`
-  - [ ] キーワード検索の動作
-  - [ ] タグフィルターの動作
-  - [ ] 複合条件での絞り込み
-- [ ] MSWハンドラーにクエリパラメータ対応追加
-- [ ] `SearchBar.test.tsx`, `TagFilter.test.tsx` 作成
+- [x] `src/components/hooks/useArticleFilter/index.test.ts`
+  - [x] キーワード検索の動作
+  - [x] タグフィルターの動作
+  - [x] 複合条件での絞り込み
+- [x] MSWハンドラーにクエリパラメータ対応追加
+- [x] `SearchBar.test.tsx`, `TagFilter.test.tsx` 作成
 
 ### Day 17（1h）：楽観的更新の実装
 
