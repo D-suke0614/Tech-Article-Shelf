@@ -1,5 +1,6 @@
 import { trpc } from '@/lib/client/trpc'
 import { ArticleList } from '@/components/features/article/ArticleList'
+import { ArticleForm } from '@/components/features/article/ArticleForm'
 
 export default function Home() {
   const { data: articles, isLoading, error } = trpc.article.list.useQuery()
@@ -15,6 +16,10 @@ export default function Home() {
       </header>
 
       <main className="max-w-5xl mx-auto px-4 py-8">
+        <div className="mb-8">
+          <ArticleForm />
+        </div>
+
         {isLoading && (
           <div className="text-center py-16 text-gray-400">
             <p>読み込み中...</p>
