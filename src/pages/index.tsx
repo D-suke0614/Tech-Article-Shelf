@@ -1,4 +1,3 @@
-import { trpc } from '@/lib/client/trpc'
 import { ArticleList } from '@/components/features/article/ArticleList'
 import { ArticleForm } from '@/components/features/article/ArticleForm'
 import { SearchBar } from '@/components/ui/SearchBar'
@@ -6,9 +5,9 @@ import { TagFilter } from '@/components/ui/TagFilter'
 import { useArticleFilter } from '@/components/hooks/useArticleFilter'
 
 export default function Home() {
-  const { data: allArticles } = trpc.article.list.useQuery()
   const {
     articles,
+    allTags,
     isLoading,
     error,
     search,
@@ -18,13 +17,6 @@ export default function Home() {
     clearFilters,
     hasActiveFilters,
   } = useArticleFilter()
-
-  // 全記事からタグ一覧を抽出（重複なし）
-  const allTags = Array.from(
-    new Map(
-      (allArticles ?? []).flatMap((a) => a.tags).map((t) => [t.id, t])
-    ).values()
-  )
 
   return (
     <div className="min-h-screen bg-gray-50">

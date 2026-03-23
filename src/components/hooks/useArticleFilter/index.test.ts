@@ -1,9 +1,6 @@
 import { renderHook, act, waitFor } from '@testing-library/react'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { http, HttpResponse } from 'msw'
-import superjson from 'superjson'
 import React from 'react'
-import { server } from '@/lib/server/api/msw/server'
 import { trpc, createTRPCClient } from '@/lib/client/trpc'
 import { mockArticles } from '@/lib/server/api/article/msw/fixture'
 import { useArticleFilter } from '.'
@@ -60,42 +57,84 @@ describe('useArticleFilter', () => {
       })
       expect(result.current.articles).toHaveLength(mockArticles.length)
     })
-  })
 
-  describe('キーワード検索', () => {
-    it('search を設定するとキーワードフィルターが有効になる', async () => {
+    it('全記事からタグ一覧が抽出される', async () => {
       // Arrange
-      server.use(
-        http.get('/api/trpc/article.list', ({ request }) => {
-          const url = new URL(request.url)
-          const inputParam = url.searchParams.get('input')
-          const input = inputParam
-            ? (JSON.parse(inputParam) as { json?: { search?: string } })
-            : null
-          const search = input?.json?.search
-
-          const filtered = search
-            ? mockArticles.filter((a) =>
-                a.title.toLowerCase().includes(search.toLowerCase())
-              )
-            : mockArticles
-
-          return HttpResponse.json({
-            result: { data: superjson.serialize(filtered) },
-          })
-        })
-      )
       const { wrapper } = createWrapper()
       const { result } = renderHook(() => useArticleFilter(), { wrapper })
+
+      await waitFor(() => {
+        expect(result.current.isLoading).toBe(false)
+      })
+
+      // Assert: mockArticles には React, フロントエンド, TypeScript の3タグ
+      expect(result.current.allTags.length).toBeGreaterThan(0)
+    })
+  })
+
+  describe('キーワード検索（クライアントサイドフィルタリング）', () => {
+    it('search を設定するとタイトルでフィルタリングされる', async () => {
+      // Arrange
+      const { wrapper } = createWrapper()
+      const { result } = renderHook(() => useArticleFilter(), { wrapper })
+
+      await waitFor(() => {
+        expect(result.current.isLoading).toBe(false)
+      })
 
       // Act
       act(() => {
         result.current.setSearch('React')
       })
 
-      // Assert
+      // Assert: "React Hooksの基本を理解する" のみマッチ
       expect(result.current.search).toBe('React')
       expect(result.current.hasActiveFilters).toBe(true)
+      expect(result.current.articles).toHaveLength(1)
+      expect(result.current.articles[0].title).toContain('React')
+    })
+
+    it('大文字小文字を無視して検索される', async () => {
+      // Arrange
+      const { wrapper } = createWrapper()
+      const { result } = renderHook(() => useArticleFilter(), { wrapper })
+
+      await waitFor(() => {
+        expect(result.current.isLoading).toBe(false)
+      })
+
+      // Act: 小文字で検索
+      act(() => {
+        result.current.setSearch('typescript')
+      })
+
+      // Assert
+      expect(result.current.articles.length).toBeGreaterThan(0)
+      expect(
+        result.current.articles.every(
+          (a) =>
+            a.title.toLowerCase().includes('typescript') ||
+            (a.description?.toLowerCase().includes('typescript') ?? false)
+        )
+      ).toBe(true)
+    })
+
+    it('マッチしないキーワードの場合、空配列が返される', async () => {
+      // Arrange
+      const { wrapper } = createWrapper()
+      const { result } = renderHook(() => useArticleFilter(), { wrapper })
+
+      await waitFor(() => {
+        expect(result.current.isLoading).toBe(false)
+      })
+
+      // Act
+      act(() => {
+        result.current.setSearch('存在しないキーワード12345')
+      })
+
+      // Assert
+      expect(result.current.articles).toHaveLength(0)
     })
   })
 
@@ -123,7 +162,6 @@ describe('useArticleFilter', () => {
       act(() => {
         result.current.toggleTag('tag-1')
       })
-      expect(result.current.selectedTagIds).toContain('tag-1')
 
       // Act
       act(() => {
@@ -148,13 +186,36 @@ describe('useArticleFilter', () => {
       // Assert
       expect(result.current.selectedTagIds).toEqual(['tag-1', 'tag-2'])
     })
+
+    it('タグ選択でフィルタリングされる', async () => {
+      // Arrange: tag-1 は article-1 に紐付いている
+      const { wrapper } = createWrapper()
+      const { result } = renderHook(() => useArticleFilter(), { wrapper })
+
+      await waitFor(() => {
+        expect(result.current.isLoading).toBe(false)
+      })
+
+      // Act
+      act(() => {
+        result.current.toggleTag('tag-1')
+      })
+
+      // Assert: tag-1（React）を持つ article-1 のみ表示
+      expect(result.current.articles).toHaveLength(1)
+      expect(result.current.articles[0].id).toBe('article-1')
+    })
   })
 
   describe('フィルタークリア', () => {
-    it('clearFilters を呼ぶと search と selectedTagIds がリセットされる', () => {
+    it('clearFilters を呼ぶと全フィルターがリセットされる', async () => {
       // Arrange
       const { wrapper } = createWrapper()
       const { result } = renderHook(() => useArticleFilter(), { wrapper })
+
+      await waitFor(() => {
+        expect(result.current.isLoading).toBe(false)
+      })
 
       act(() => {
         result.current.setSearch('React')
@@ -171,6 +232,7 @@ describe('useArticleFilter', () => {
       expect(result.current.search).toBe('')
       expect(result.current.selectedTagIds).toEqual([])
       expect(result.current.hasActiveFilters).toBe(false)
+      expect(result.current.articles).toHaveLength(mockArticles.length)
     })
   })
 })
