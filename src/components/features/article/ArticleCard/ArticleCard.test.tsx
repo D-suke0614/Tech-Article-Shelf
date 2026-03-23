@@ -1,6 +1,17 @@
-import { render, screen } from '@testing-library/react'
+import { render, screen, fireEvent } from '@testing-library/react'
 import { ArticleCard } from './ArticleCard'
 import type { ArticleWithTags } from '@/lib/server/api/article/msw/fixture'
+
+const mockToggleFavorite = jest.fn()
+
+// useToggleFavorite は tRPC に依存するためモック化
+jest.mock('@/components/hooks/useToggleFavorite', () => ({
+  useToggleFavorite: () => ({
+    toggleFavorite: mockToggleFavorite,
+    isLoading: false,
+    error: null,
+  }),
+}))
 
 const baseArticle: ArticleWithTags = {
   id: 'test-1',
@@ -73,21 +84,39 @@ describe('ArticleCard', () => {
     })
   })
 
-  describe('お気に入りバッジ', () => {
-    it('お気に入りの場合（isFavorite: true）、お気に入りバッジが表示される', () => {
+  describe('お気に入りボタン', () => {
+    it('お気に入りの場合（isFavorite: true）、aria-pressed が true になる', () => {
       // Arrange
       render(<ArticleCard article={{ ...baseArticle, isFavorite: true }} />)
 
       // Assert
-      expect(screen.getByText('お気に入り')).toBeInTheDocument()
+      expect(
+        screen.getByRole('button', { name: 'お気に入りを解除' })
+      ).toHaveAttribute('aria-pressed', 'true')
     })
 
-    it('お気に入りでない場合（isFavorite: false）、お気に入りバッジが表示されない', () => {
+    it('お気に入りでない場合（isFavorite: false）、aria-pressed が false になる', () => {
       // Arrange
       render(<ArticleCard article={{ ...baseArticle, isFavorite: false }} />)
 
       // Assert
-      expect(screen.queryByText('お気に入り')).not.toBeInTheDocument()
+      expect(
+        screen.getByRole('button', { name: 'お気に入りに追加' })
+      ).toHaveAttribute('aria-pressed', 'false')
+    })
+
+    it('お気に入りボタンをクリックすると toggleFavorite が呼ばれる', () => {
+      // Arrange
+      render(<ArticleCard article={{ ...baseArticle, isFavorite: false }} />)
+
+      // Act
+      fireEvent.click(screen.getByRole('button', { name: 'お気に入りに追加' }))
+
+      // Assert
+      expect(mockToggleFavorite).toHaveBeenCalledWith({
+        id: 'test-1',
+        currentValue: false,
+      })
     })
   })
 

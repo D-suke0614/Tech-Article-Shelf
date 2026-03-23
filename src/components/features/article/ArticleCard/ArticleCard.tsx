@@ -2,6 +2,7 @@ import Image from 'next/image'
 import type { inferRouterOutputs } from '@trpc/server'
 import type { AppRouter } from '@/lib/server/api/root'
 import { extractDomain } from '@/lib/shared/utils/url'
+import { useToggleFavorite } from '@/components/hooks/useToggleFavorite'
 
 type RouterOutputs = inferRouterOutputs<AppRouter>
 type Article = RouterOutputs['article']['list'][number]
@@ -12,6 +13,7 @@ type ArticleCardProps = {
 
 export function ArticleCard({ article }: ArticleCardProps) {
   const domain = extractDomain(article.url)
+  const { toggleFavorite } = useToggleFavorite()
 
   return (
     <article className="bg-white rounded-lg border border-gray-200 overflow-hidden hover:shadow-md transition-shadow">
@@ -33,11 +35,26 @@ export function ArticleCard({ article }: ArticleCardProps) {
               未読
             </span>
           )}
-          {article.isFavorite && (
-            <span className="text-xs font-medium bg-yellow-100 text-yellow-700 px-2 py-0.5 rounded-full">
-              お気に入り
-            </span>
-          )}
+          <button
+            type="button"
+            onClick={() =>
+              toggleFavorite({
+                id: article.id,
+                currentValue: article.isFavorite,
+              })
+            }
+            aria-label={
+              article.isFavorite ? 'お気に入りを解除' : 'お気に入りに追加'
+            }
+            aria-pressed={article.isFavorite}
+            className={`text-xs font-medium px-2 py-0.5 rounded-full transition-colors ${
+              article.isFavorite
+                ? 'bg-yellow-100 text-yellow-700 hover:bg-yellow-200'
+                : 'bg-gray-100 text-gray-500 hover:bg-gray-200'
+            }`}
+          >
+            {article.isFavorite ? 'お気に入り' : '☆'}
+          </button>
         </div>
 
         <h2 className="font-semibold text-gray-900 text-sm leading-snug mb-1 line-clamp-2">

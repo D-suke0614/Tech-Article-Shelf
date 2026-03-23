@@ -256,9 +256,9 @@ Mutation（POST）: /api/trpc/article.create
 - [x] MSWハンドラーにクエリパラメータ対応追加
 - [x] `SearchBar.test.tsx`, `TagFilter.test.tsx` 作成
 
-### Day 17（1h）：楽観的更新の実装
+### Day 17（1h）：楽観的更新の実装 ✅
 
-- [ ] `toggleFavorite` の楽観的更新
+- [x] `toggleFavorite` の楽観的更新
   ```typescript
   const utils = trpc.useUtils()
   const toggleFavorite = trpc.article.toggleFavorite.useMutation({
@@ -280,13 +280,13 @@ Mutation（POST）: /api/trpc/article.create
   })
   ```
 
-### Day 18（1h）：楽観的更新のテスト
+### Day 18（1h）：楽観的更新のテスト ✅
 
-- [ ] `src/components/hooks/useToggleFavorite/index.test.ts`
-  - [ ] 即座にUIが更新されることを検証
-  - [ ] API成功時：状態が維持される
-  - [ ] API失敗時：ロールバックされる
-- [ ] MSWで遅延レスポンス、エラーレスポンスをシミュレート
+- [x] `src/components/hooks/useToggleFavorite/index.test.ts`
+  - [x] 即座にUIが更新されることを検証
+  - [x] API成功時：状態が維持される
+  - [x] API失敗時：ロールバックされる
+- [x] MSWで遅延レスポンス、エラーレスポンスをシミュレート
   ```typescript
   // 遅延レスポンスの例
   http.post('/api/trpc/article.toggleFavorite', async () => {
